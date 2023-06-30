@@ -6,7 +6,6 @@ import { getUser } from "../apicalls/user.actions";
 import { setLoader } from "../redux/LoaderSlice";
 import { setUser } from "../redux/UserSlice";
 import {
-  Avatar,
   IconButton,
   MenuItem,
   Typography,
@@ -16,9 +15,11 @@ import {
 } from "@mui/material";
 import { NotificationsActive } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const ProtectedRoutes = ({ children }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { user } = useSelector((state) => state.users);
 
   const validateToken = async () => {
@@ -39,6 +40,12 @@ const ProtectedRoutes = ({ children }) => {
   useEffect(() => {
     validateToken();
   }, []);
+
+  // useEffect(() => {
+  //   if (!user) {
+  //     navigate("/login");
+  //   }
+  // }, []);
 
   return (
     user && (
@@ -76,7 +83,10 @@ const ProtectedRoutes = ({ children }) => {
                   }}
                   input={<InputBase />}
                 >
-                  <MenuItem value={user.firstName}>
+                  <MenuItem
+                    value={user.firstName}
+                    onClick={() => navigate("/profile")}
+                  >
                     <Typography className="uppercase">
                       {user.firstName}
                     </Typography>

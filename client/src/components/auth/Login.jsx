@@ -54,7 +54,7 @@ const LoginForm = () => {
 
   return (
     <div className="h-screen  flex justify-center items-center bg-gray-50 shadow">
-      <div className="bg-white w-[450px] rounded">
+      <div className="bg-white w-[450px] rounded pb-5">
         <div
           className="h-[60px] bg-secondary-800 flex justify-center items-center "
           style={{ borderTopLeftRadius: "5px", borderTopRightRadius: "5px" }}
@@ -62,6 +62,7 @@ const LoginForm = () => {
           <h1 className="text-center text-gray-50">𝗥𝗲𝘀𝗵𝗼𝗽𝗶𝗳𝘆 - Login</h1>
         </div>
         <form onSubmit={handleLogin} className="flex flex-col p-3">
+          <br />
           <TextField
             label="Email"
             name="email"
@@ -82,10 +83,10 @@ const LoginForm = () => {
           />
           <br />
           <button
-            className="bg-secondary-800 text-gray-20 h-[35px] rounded "
+            className="bg-secondary-800 text-gray-20 h-[40px] rounded "
             type="submit"
           >
-            Login
+            <strong>Login</strong>
           </button>
           <p className="mt-4 text-center">
             Forgot password?{" "}

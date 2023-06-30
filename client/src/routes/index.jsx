@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import LoginPage from "../pages/Login";
 import RegisterPage from "../pages/Register";
 import ProtectedRoutes from "./ProtectedRoutes";
+import Profile from "../pages/Profile";
 
 const index = () => {
   return (
@@ -14,6 +15,14 @@ const index = () => {
           element={
             <ProtectedRoutes>
               <Home />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoutes>
+              <Profile />
             </ProtectedRoutes>
           }
         />

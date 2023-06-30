@@ -51,7 +51,7 @@ const RegisterForm = () => {
   }, []);
   return (
     <div className="h-screen flex justify-center items-center bg-gray-50 shadow">
-      <div className="bg-white w-[450px] rounded">
+      <div className="bg-white w-[450px] rounded pb-5">
         <div
           className="h-[60px] bg-secondary-800 flex justify-center items-center"
           style={{ borderTopLeftRadius: "5px", borderTopRightRadius: "5px" }}
@@ -97,10 +97,10 @@ const RegisterForm = () => {
           />
           <br />
           <button
-            className="bg-secondary-800 text-gray-20 h-[35px] rounded "
+            className="bg-secondary-800 text-gray-20 h-[40px] rounded "
             type="submit"
           >
-            Register
+            <strong>Register</strong>
           </button>
           <p className="mt-4 text-center">
             Already have an account?{" "}

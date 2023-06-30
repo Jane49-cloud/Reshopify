@@ -3,6 +3,8 @@ import React from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { getUser } from "../apicalls/user.actions";
+import { setLoader } from "../redux/LoaderSlice";
+import { setUser } from "../redux/UserSlice";
 import {
   Avatar,
   IconButton,
@@ -13,18 +15,23 @@ import {
   InputBase,
 } from "@mui/material";
 import { NotificationsActive } from "@mui/icons-material";
+import { useDispatch, useSelector } from "react-redux";
 
 const ProtectedRoutes = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.users);
 
   const validateToken = async () => {
     try {
+      dispatch(setLoader(true));
       const response = await getUser();
+      dispatch(setLoader(false));
       if (response.success) {
-        setUser(response.data);
+        dispatch(setUser(response.data));
         toast.success(response.message);
       }
     } catch (error) {
+      dispatch(setLoader(false));
       toast.error(error.message);
     }
   };

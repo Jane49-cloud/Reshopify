@@ -4,9 +4,12 @@ import { Link, useNavigate } from "react-router-dom";
 import { registerUser } from "../../apicalls/user.actions";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { setLoader } from "../../redux/LoaderSlice";
+import { useDispatch } from "react-redux";
 
 const RegisterForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -25,7 +28,9 @@ const RegisterForm = () => {
   const handleRegister = async (event) => {
     event.preventDefault();
     try {
+      dispatch(setLoader(true));
       const response = await registerUser(formData);
+      dispatch(setLoader(false));
       if (response.success) {
         toast.success(response.message);
         navigate("/login");
@@ -34,6 +39,7 @@ const RegisterForm = () => {
       }
       // return response.data;
     } catch (error) {
+      dispatch(setLoader(false));
       toast.error(error.message);
     }
   };

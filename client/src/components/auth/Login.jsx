@@ -3,11 +3,15 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useDispatch } from "react-redux";
+import { setLoader } from "../../redux/LoaderSlice";
 
 import { loginUser } from "../../apicalls/user.actions";
 
 const LoginForm = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -24,7 +28,9 @@ const LoginForm = () => {
   const handleLogin = async (event) => {
     event.preventDefault();
     try {
+      dispatch(setLoader(true));
       const response = await loginUser(formData);
+      dispatch(setLoader(false));
       if (response.success) {
         toast.success(response.message);
         localStorage.setItem("token", response.token);
@@ -35,6 +41,7 @@ const LoginForm = () => {
       console.log(response.message); // Log the message property
       return response.data;
     } catch (error) {
+      dispatch(setLoader(false));
       toast.error(error.message);
     }
   };
@@ -61,6 +68,7 @@ const LoginForm = () => {
             className="rounded mt-2"
             value={formData.email}
             onChange={handleInputChange}
+            autoComplete="off"
           />
           <br />
           <TextField
@@ -70,6 +78,7 @@ const LoginForm = () => {
             value={formData.password}
             onChange={handleInputChange}
             className="rounded mt-2"
+            autoComplete="off"
           />
           <br />
           <button

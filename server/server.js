@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import userRouter from "./users/routes.js";
 import productRouter from "./products/routes.js";
+import ImageRouter from "./products/controller.js";
 const app = express();
 dotenv.config();
 
@@ -13,6 +14,7 @@ app.use(cors());
 
 app.use("/users", userRouter);
 app.use("/products", productRouter);
+app.use("/products", ImageRouter);
 
 const port = 8000;
 app.listen(port, () => console.log(`Server is running on port ${port}`));

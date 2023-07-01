@@ -12,9 +12,33 @@ export const addProduct = async (payload) => {
   }
 };
 
+//get products
+
 export const getProducts = async () => {
   try {
     const response = await axiosService("/products");
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+};
+
+// Edit product
+
+export const editProduct = async (id, payload) => {
+  try {
+    const response = await axiosService.put(`/products/${id}`, payload);
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+};
+
+//Delete a product
+
+export const deleteProduct = async (id) => {
+  try {
+    const response = await axiosService.delete(`/products/${id}`);
     return response.data;
   } catch (error) {
     return error.message;

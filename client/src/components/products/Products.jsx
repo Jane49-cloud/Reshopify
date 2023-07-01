@@ -7,10 +7,13 @@ import { getProducts } from "../../apicalls/products.actions";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Table } from "antd";
-import { Delete, Edit } from "@mui/icons-material";
+import { Delete, Edit, ElectricalServices } from "@mui/icons-material";
+import { deleteProduct } from "../../apicalls/products.actions";
 
 const Products = () => {
   const [Products, setProducts] = React.useState([]);
+  const [selectedProduct, setSelectedProduct] = React.useState(null);
+  const [showProductForm, setShowProductForm] = useState(false);
   const dispatch = useDispatch();
 
   const getData = async () => {
@@ -26,10 +29,27 @@ const Products = () => {
       dispatch(setLoader(false));
     }
   };
+  const DeleteProduct = async (id) => {
+    try {
+      dispatch(setLoader(true));
+      const response = await deleteProduct(id);
+      dispatch(setLoader(false));
+      if (response.success) {
+        toast.success(response.message);
+        getData();
+      } else {
+        dispatch(setLoader(false));
+        toast.error(error.message);
+      }
+    } catch (error) {
+      dispatch(setLoader(false));
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
     getData();
   }, []);
-  const [showProductForm, setShowProductForm] = useState(false);
 
   const TableData = [
     {
@@ -62,8 +82,17 @@ const Products = () => {
       render: (text, record) => {
         return (
           <div className="flex mr-2 gap-3">
-            <Edit className="text-secondary-800 " />
-            <Delete className="text-primary-600 " />
+            <Edit
+              className="text-secondary-800 "
+              onClick={() => {
+                setSelectedProduct(record);
+                setShowProductForm(true);
+              }}
+            />
+            <Delete
+              className="text-primary-600 "
+              onClick={() => DeleteProduct(record._id)}
+            />
           </div>
         );
       },
@@ -76,7 +105,10 @@ const Products = () => {
         <button
           className="flex items-center bg-secondary-700 text-white h-10 rounded-md px-4"
           type="submit"
-          onClick={() => setShowProductForm(true)}
+          onClick={() => {
+            setSelectedProduct(null);
+            setShowProductForm(true);
+          }}
         >
           <AddIcon className="mr-2" />
           <h1 className="text-lg font-semibold"> Product</h1>
@@ -93,6 +125,8 @@ const Products = () => {
         <ProductForm
           showProductForm={showProductForm}
           setShowProductForm={setShowProductForm}
+          selectedProduct={selectedProduct}
+          getData={getData}
         />
       )}
 

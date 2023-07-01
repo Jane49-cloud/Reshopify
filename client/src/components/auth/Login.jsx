@@ -37,6 +37,7 @@ const LoginForm = () => {
         navigate("/");
       } else {
         toast.error(response.message);
+        navigate("/login");
       }
       console.log(response.message); // Log the message property
       return response.data;

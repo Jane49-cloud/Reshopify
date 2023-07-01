@@ -3,6 +3,7 @@ import RoutePaths from "./routes";
 import { BrowserRouter as Router } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Loader from "./components/Loader";
+import "./App.css";
 
 const App = () => {
   const { loading } = useSelector((state) => state.loaders);

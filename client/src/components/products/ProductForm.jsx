@@ -1,12 +1,35 @@
 import React from "react";
 import Modal from "antd/es/modal/Modal";
 import { Row, Tabs, Col } from "antd";
-import { Tab, TextField } from "@mui/material";
 import { Form, Input } from "antd";
 import TextArea from "antd/es/input/TextArea";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoader } from "../../redux/LoaderSlice";
+import { addProduct } from "../../apicalls/products.actions";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ProductForm = ({ showProductForm, setShowProductForm }) => {
-  const onFinish = (values) => {
+  const { user } = useSelector((state) => state.users);
+  const dispatch = useDispatch();
+  const onFinish = async (values) => {
+    try {
+      values.seller = user._id;
+      values.status = "pending";
+      dispatch(setLoader(true));
+      const response = await addProduct(values);
+      dispatch(setLoader(false));
+      if (response.success) {
+        toast.success(response.message);
+        setShowProductForm(false);
+      } else {
+        toast.error(error.message);
+        dispatch(setLoader(false));
+      }
+    } catch (error) {
+      toast.error(error.message);
+      dispatch(setLoader(false));
+    }
     console.log(values);
   };
   const formRef = React.useRef(null);
@@ -47,7 +70,7 @@ const ProductForm = ({ showProductForm, setShowProductForm }) => {
               </Form.Item>
               <Form.Item
                 label="Description"
-                name="describe"
+                name="description"
                 rules={[
                   { required: true, message: "Please enter the description" },
                 ]}
@@ -87,6 +110,7 @@ const ProductForm = ({ showProductForm, setShowProductForm }) => {
                   >
                     <select name="" id="" className="h-[35px] p-2 border">
                       <option value="electronics">Electronics</option>
+                      <option value="electronics">Electronics</option>
                       <option value="home">Home</option>
                       <option value="fashion">Fashion</option>
                       <option value="sports">Sports</option>
@@ -111,6 +135,9 @@ const ProductForm = ({ showProductForm, setShowProductForm }) => {
           <Tabs.TabPane tab="Images" key="2"></Tabs.TabPane>
         </Tabs>
       </Modal>
+      <div>
+        <ToastContainer />
+      </div>
     </div>
   );
 };

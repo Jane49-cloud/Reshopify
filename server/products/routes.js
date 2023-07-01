@@ -1,9 +1,17 @@
 import express from "express";
-import { createProduct, getProducts } from "./controller.js";
+import authMiddleware from "../users/middleware/auth.js";
+import {
+  createProduct,
+  getProducts,
+  editProduct,
+  deleteProduct,
+} from "./controller.js";
 
 const router = express.Router();
 
-router.post("/", createProduct);
+router.post("/", authMiddleware, createProduct);
 router.get("/", getProducts);
+router.put("/:id", authMiddleware, editProduct);
+router.delete("/:id", authMiddleware, deleteProduct);
 
 export default router;

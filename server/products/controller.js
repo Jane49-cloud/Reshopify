@@ -35,3 +35,38 @@ export const getProducts = async (req, res) => {
     });
   }
 };
+
+//Edit product
+
+export const editProduct = async (req, res) => {
+  try {
+    await Product.findByIdAndUpdate(req.params.id, req.body);
+    res.send({
+      success: true,
+      message: "Product updated successfully...",
+    });
+  } catch (error) {
+    res.send({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+// DELETE PRODUCT
+
+export const deleteProduct = async (req, res) => {
+  try {
+    await Product.findByIdAndDelete(req.params.id);
+    res.send({
+      success: true,
+      message: "Product deleted successfully...",
+    });
+  } catch (error) {
+    res.send({
+      success: false,
+      message: error.message,
+    });
+    console.log(error);
+  }
+};

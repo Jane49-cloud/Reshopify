@@ -65,7 +65,7 @@ export const loginUser = async (req, res) => {
       process.env.TOKEN_SECRET,
       { expiresIn: "1d" }
     );
-    res.json({ success: true, message: "User logged in successfully", token });
+    res.send({ success: true, message: "User logged in successfully", token });
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -80,7 +80,7 @@ export const currentUser = async (req, res) => {
     const user = await User.findById(req.body.userId);
     res.send({
       success: true,
-      message: "User fetched successfully",
+      message: "data fetched successfully",
       data: user,
     });
   } catch (error) {

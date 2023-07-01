@@ -8,6 +8,7 @@ import { setLoader } from "../../redux/LoaderSlice";
 import { addProduct, editProduct } from "../../apicalls/products.actions";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import Images from "./Images";
 
 const ProductForm = ({
   showProductForm,
@@ -17,6 +18,7 @@ const ProductForm = ({
 }) => {
   const { user } = useSelector((state) => state.users);
   const dispatch = useDispatch();
+  const [activeTab, setActiveTab] = React.useState("1");
   const onFinish = async (values) => {
     try {
       dispatch(setLoader(true));
@@ -74,12 +76,17 @@ const ProductForm = ({
         onOk={() => formRef.current.submit()}
         centered
         className="custom-modal"
+        {...(activeTab === "2" && { footer: false })}
       >
         <div>
           <h1 className="text-center  text-2xl ">
             {selectedProduct ? "Edit Product" : "Add Product"}
           </h1>
-          <Tabs defaultActiveKey="1">
+          <Tabs
+            defaultActiveKey="1"
+            activeTab={activeTab}
+            onChange={(key) => setActiveTab(key)}
+          >
             <Tabs.TabPane tab="info" key="1">
               <Form layout="vertical" ref={formRef} onFinish={onFinish}>
                 <Form.Item
@@ -156,7 +163,13 @@ const ProductForm = ({
                 </div>
               </Form>
             </Tabs.TabPane>
-            <Tabs.TabPane tab="Images" key="2"></Tabs.TabPane>
+            <Tabs.TabPane tab="Images" key="2" disabled={!selectedProduct}>
+              <Images
+                selectedProduct={selectedProduct}
+                getData={getData}
+                setShowProductForm={setShowProductForm}
+              />
+            </Tabs.TabPane>
           </Tabs>
         </div>
       </Modal>

@@ -44,3 +44,14 @@ export const deleteProduct = async (id) => {
     return error.message;
   }
 };
+
+// Upload Images
+
+export const uploadImages = async (payload) => {
+  try {
+    const response = await axiosService.post(`/products/upload`, payload);
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+};

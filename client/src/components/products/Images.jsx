@@ -1,13 +1,15 @@
 import { Button, Upload } from "antd";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { setLoader } from "../../redux/LoaderSlice";
 import { uploadImages } from "../../apicalls/products.actions";
+import { Delete, Edit } from "@mui/icons-material";
 
 const Images = ({ selectedProduct, getData, setShowProductForm }) => {
   const [file, setFile] = useState(null);
+  const [images, setImages] = useState(selectedProduct.images);
   const dispatch = useDispatch();
   const upload = async () => {
     try {
@@ -21,6 +23,7 @@ const Images = ({ selectedProduct, getData, setShowProductForm }) => {
       dispatch(setLoader(false));
       if (response.success) {
         toast.success(response.message);
+        setImages([...images, response.data]);
         getData();
         // setShowProductForm(false);
       } else {
@@ -38,7 +41,26 @@ const Images = ({ selectedProduct, getData, setShowProductForm }) => {
         beforeUpload={() => false}
         onChange={(info) => setFile(info.file)}
       >
-        <Button type="dashed ">Upload</Button>
+        <div className="flex gap-5 ">
+          {images.map((image) => {
+            return (
+              <div className="flex gap-3 border border-solid border-gray-100 rounded p-2 items-end">
+                <img
+                  src={image}
+                  className="h-20 w-20 object-cover,  before:"
+                  alt=""
+                />
+                <Delete
+                  className="text-gray-500  "
+                  onClick={() => DeleteProduct(record._id)}
+                />
+              </div>
+            );
+          })}
+        </div>
+        <Button type="dashed " className="mt-2">
+          Upload
+        </Button>
       </Upload>
 
       <div className="flex justify-end gap-5 mt-5">

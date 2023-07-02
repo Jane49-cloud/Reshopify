@@ -161,6 +161,13 @@ const ProductForm = ({
                     </Form.Item>
                   ))}
                 </div>
+                <div className="text-center">
+                  <p>Note</p>
+                  <p>
+                    To add product images, save the data, navigate to edit and
+                    upload the images
+                  </p>
+                </div>
               </Form>
             </Tabs.TabPane>
             <Tabs.TabPane tab="Images" key="2" disabled={!selectedProduct}>

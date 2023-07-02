@@ -76,3 +76,7 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
+
+textArea {
+  margin-top: 5px;
+}

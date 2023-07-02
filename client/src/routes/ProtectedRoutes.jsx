@@ -52,7 +52,11 @@ const ProtectedRoutes = ({ children }) => {
       <div>
         {/* Header */}
         <div className="flex justify-between items-center py-3 px-5 bg-gray-100 text-white">
-          <Typography variant="h6" component="div">
+          <Typography
+            variant="h6"
+            component="div"
+            onClick={() => navigate("/")}
+          >
             <strong className="text-secondary-800 shadow-sm text-2xl">
               𝗥𝗲𝘀𝗵𝗼𝗽𝗶𝗳𝘆
             </strong>
@@ -85,11 +89,15 @@ const ProtectedRoutes = ({ children }) => {
                 >
                   <MenuItem
                     value={user.firstName}
-                    onClick={() => navigate("/profile")}
+                    onClick={() => {
+                      if (user.role === "admin") {
+                        navigate("/admin");
+                      } else {
+                        navigate("/profile");
+                      }
+                    }}
                   >
-                    <Typography className="uppercase">
-                      {user.firstName}
-                    </Typography>
+                    <Typography>{user.firstName}</Typography>
                   </MenuItem>
                   <MenuItem
                     onClick={() => {

@@ -32,3 +32,27 @@ export const getUser = async (req, res) => {
     return error.message;
   }
 };
+
+//get all users
+
+export const getUsers = async () => {
+  try {
+    const response = await axiosService.get("/users/all-users");
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+};
+
+// Edit user status
+
+export const editUserStatus = async (id, status) => {
+  try {
+    const response = await axiosService.put(`/users/status/${id}`, {
+      status,
+    });
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+};

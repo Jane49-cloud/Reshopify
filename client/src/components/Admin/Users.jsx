@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import ProductForm from "./ProductForm";
+import ProductForm from "../products/ProductForm";
 import AddIcon from "@mui/icons-material/Add";
 import { useDispatch, useSelector } from "react-redux";
 import { setLoader } from "../../redux/LoaderSlice";
@@ -9,23 +9,35 @@ import "react-toastify/dist/ReactToastify.css";
 import { Table } from "antd";
 import { Delete, Edit } from "@mui/icons-material";
 import { deleteProduct } from "../../apicalls/products.actions";
+import { getUsers, editUserStatus } from "../../apicalls/user.actions";
 
-const Products = () => {
-  const [Products, setProducts] = React.useState([]);
-  const [selectedProduct, setSelectedProduct] = React.useState(null);
+const Users = () => {
+  const [users, setUsers] = React.useState([]);
+  const [selectedUser, setSelectedUser] = React.useState(null);
   const [showProductForm, setShowProductForm] = useState(false);
-  const { user } = useSelector((state) => state.users);
+
+  const onStatusChange = async (id, status) => {
+    try {
+      const response = await editUserStatus(id, status);
+      if (response.success) {
+        toast.success(response.message);
+        getData();
+      } else {
+        toast.error(response.message);
+      }
+    } catch (error) {}
+  };
+
   const dispatch = useDispatch();
 
   const getData = async () => {
     try {
       dispatch(setLoader(true));
-      const response = await getProducts({
-        seller: user._id,
-      });
+      const response = await getUsers(null);
       if (response.success) {
-        setProducts(response.products);
+        setUsers(response.data);
       }
+      console.log(response);
       dispatch(setLoader(false));
     } catch (error) {
       toast.error(error.message);
@@ -56,34 +68,76 @@ const Products = () => {
 
   const TableData = [
     {
-      title: "Name",
-      dataIndex: "name",
+      title: "First Name",
+      dataIndex: "firstName",
     },
     {
-      title: "Description",
-      dataIndex: "description",
+      title: "Last Name",
+      dataIndex: "lastName",
     },
     {
-      title: "Price",
-      dataIndex: "price",
+      title: "Email",
+      dataIndex: "email",
     },
     {
-      title: "Category",
-      dataIndex: "category",
+      title: "Role",
+      dataIndex: "role",
     },
-    {
-      title: "Age",
-      dataIndex: "age",
-    },
+
     {
       title: "Status",
       dataIndex: "status",
     },
     {
-      title: "CreatedAt",
+      title: "Date Joined",
       dataIndex: "createdAt",
       render: (createdAt) => new Date(createdAt).toLocaleString(),
     },
+    {
+      title: "Update Status",
+      dataIndex: "updatedAt",
+      render: (text, record) => {
+        const { status, _id } = record;
+        return (
+          <div className="flex gap-3">
+            {status === "active" && (
+              <span
+                className="cursor-pointer"
+                onClick={() => onStatusChange(_id, "inactive")}
+              >
+                Inactivate
+              </span>
+            )}
+            {status === "active" && (
+              <span
+                className="cursor-pointer"
+                onClick={() => onStatusChange(_id, "blocked")}
+              >
+                block
+              </span>
+            )}
+            {status === "inactive" && (
+              <span
+                className="cursor-pointer"
+                onClick={() => onStatusChange(_id, "active")}
+              >
+                Activate
+              </span>
+            )}
+
+            {status === "blocked" && (
+              <span
+                className="cursor-pointer"
+                onClick={() => onStatusChange(_id, "active")}
+              >
+                Unblock
+              </span>
+            )}
+          </div>
+        );
+      },
+    },
+
     {
       title: "Actions",
       dataIndex: "action",
@@ -125,7 +179,7 @@ const Products = () => {
       <div className="p-5 pink-text-gradient">
         <Table
           columns={TableData}
-          dataSource={Products}
+          dataSource={users}
           className=" border rounded-sm "
         ></Table>
       </div>
@@ -145,4 +199,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Users;

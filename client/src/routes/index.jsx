@@ -5,6 +5,7 @@ import LoginPage from "../pages/Login";
 import RegisterPage from "../pages/Register";
 import ProtectedRoutes from "./ProtectedRoutes";
 import Profile from "../pages/Profile";
+import Admin from "../pages/Admin";
 
 const index = () => {
   return (
@@ -15,6 +16,14 @@ const index = () => {
           element={
             <ProtectedRoutes>
               <Home />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoutes>
+              <Admin />
             </ProtectedRoutes>
           }
         />

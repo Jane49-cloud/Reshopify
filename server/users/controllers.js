@@ -91,3 +91,39 @@ export const currentUser = async (req, res) => {
     });
   }
 };
+
+export const getUsers = async (req, res) => {
+  try {
+    const users = await User.find();
+    res.send({
+      success: true,
+      message: "Users fetched successfully",
+      data: users,
+    });
+  } catch (error) {
+    res.send({
+      success: false,
+      message: "An error occurred",
+      error: error.message,
+    });
+    console.log(error, users);
+  }
+};
+
+//update status
+
+export const updateStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    await User.findByIdAndUpdate(req.params.id, { status });
+    res.send({
+      success: true,
+      message: "Status updated successfully...",
+    });
+  } catch (error) {
+    res.send({
+      success: false,
+      message: error.message,
+    });
+  }
+};

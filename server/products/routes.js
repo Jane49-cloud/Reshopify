@@ -5,13 +5,15 @@ import {
   getProducts,
   editProduct,
   deleteProduct,
+  updateStatus,
 } from "./controller.js";
 
 const router = express.Router();
 
 router.post("/", authMiddleware, createProduct);
-router.get("/", getProducts);
+router.post("/filter", getProducts);
 router.put("/:id", authMiddleware, editProduct);
+router.put("/status/:id", authMiddleware, updateStatus);
 router.delete("/:id", authMiddleware, deleteProduct);
 
 export default router;

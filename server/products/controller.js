@@ -29,7 +29,14 @@ export const createProduct = async (req, res) => {
 
 export const getProducts = async (req, res) => {
   try {
-    const products = await Product.find();
+    const { seller, categories = [], age = [] } = req.body;
+    let filters = {};
+    if (seller) {
+      filters.seller = seller;
+    }
+    const products = await Product.find(filters)
+      .populate("seller")
+      .sort({ createdAt: -1 });
     res.send({
       success: true,
       products,
@@ -39,6 +46,7 @@ export const getProducts = async (req, res) => {
       success: false,
       message: error.message,
     });
+    console.log(error);
   }
 };
 
@@ -77,11 +85,29 @@ export const deleteProduct = async (req, res) => {
   }
 };
 
+//update status
+
+export const updateStatus = async (req, res) => {
+  try {
+    const { status } = req.body;
+    await Product.findByIdAndUpdate(req.params.id, { status });
+    res.send({
+      success: true,
+      message: "Status updated successfully...",
+    });
+  } catch (error) {
+    res.send({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
 // Update to add images via cloudinary
 
 const storage = multer.diskStorage({
   filename: function (req, file, callback) {
-    callback(null, Date.now() + this.file.originalname);
+    callback(null, Date.now() + file.originalname);
   },
 });
 
@@ -90,10 +116,15 @@ router.post(
   authMiddleware,
   multer({ storage: storage }).single("file"),
   async (req, res) => {
+    let result;
     try {
-      const result = await cloudinary.upload(req.file.path);
+      result = await cloudinary.uploader.upload(req.file.path, {
+        folder: "Reshopify",
+      });
       const productId = req.body.productId;
-      await Product.findByIdAndUpdate(productId);
+      await Product.findByIdAndUpdate(productId, {
+        $push: { images: result.secure_url },
+      });
       res.send({
         success: true,
         message: "image uploaded successfully...",
@@ -105,6 +136,7 @@ router.post(
         message: "Error uploading images...",
         result,
       });
+      console.log(error);
     }
   }
 );

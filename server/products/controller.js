@@ -50,6 +50,24 @@ export const getProducts = async (req, res) => {
   }
 };
 
+//get Product by id
+export const getProduct = async (req, res) => {
+  try {
+    const product = await Product.findById(req.params.id).populate("seller");
+    res.send({
+      data: product,
+      success: true,
+      message: "Product fetched successfully...",
+    });
+  } catch (error) {
+    res.send({
+      success: false,
+      message: error.message,
+    });
+    console.log(error);
+  }
+};
+
 //Edit product
 
 export const editProduct = async (req, res) => {

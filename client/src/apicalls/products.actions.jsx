@@ -33,6 +33,16 @@ export const editProduct = async (id, payload) => {
     return error.message;
   }
 };
+//get a product
+
+export const getProduct = async (id) => {
+  try {
+    const response = await axiosService.get(`/products/${id}`);
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+};
 
 //Delete a product
 

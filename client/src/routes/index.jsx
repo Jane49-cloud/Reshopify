@@ -6,6 +6,7 @@ import RegisterPage from "../pages/Register";
 import ProtectedRoutes from "./ProtectedRoutes";
 import Profile from "../pages/Profile";
 import Admin from "../pages/Admin";
+import ProductInfo from "../pages/ProductInfo";
 
 const index = () => {
   return (
@@ -32,6 +33,14 @@ const index = () => {
           element={
             <ProtectedRoutes>
               <Profile />
+            </ProtectedRoutes>
+          }
+        />
+        <Route
+          path="/product/:id"
+          element={
+            <ProtectedRoutes>
+              <ProductInfo />
             </ProtectedRoutes>
           }
         />

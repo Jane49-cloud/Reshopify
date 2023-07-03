@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { setLoader } from "../../redux/LoaderSlice";
-import { uploadImages } from "../../apicalls/products.actions";
+import { uploadImages, editProduct } from "../../apicalls/products.actions";
 import { Delete, Edit } from "@mui/icons-material";
 
 const Images = ({ selectedProduct, getData, setShowProductForm }) => {
@@ -34,6 +34,26 @@ const Images = ({ selectedProduct, getData, setShowProductForm }) => {
       toast.success(error.message);
     }
   };
+
+  const deleteProductImage = async (image) => {
+    try {
+      dispatch(setLoader(true));
+      const updatedArray = images.filter((img) => img !== image);
+      const updatedProduct = { ...selectedProduct, images: updatedArray };
+      const response = await editProduct(selectedProduct._id, updatedProduct);
+      dispatch(setLoader(false));
+      if (response.success) {
+        toast.success(response.message);
+        getData();
+      } else {
+        dispatch(setLoader(false));
+        toast.error(error.message);
+      }
+    } catch (error) {
+      dispatch(setLoader(false));
+      toast.success(error.message);
+    }
+  };
   return (
     <div>
       <Upload
@@ -52,7 +72,7 @@ const Images = ({ selectedProduct, getData, setShowProductForm }) => {
                 />
                 <Delete
                   className="text-gray-500  "
-                  onClick={() => DeleteProduct(record._id)}
+                  onClick={() => deleteProductImage(image)}
                 />
               </div>
             );

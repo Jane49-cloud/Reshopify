@@ -147,7 +147,7 @@ const Products = () => {
             {status === "blocked" && (
               <span
                 className="cursor-pointer"
-                onClick={() => onStatusChange(_id, "approve")}
+                onClick={() => onStatusChange(_id, "approved")}
               >
                 Unblock
               </span>

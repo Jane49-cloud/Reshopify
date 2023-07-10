@@ -78,3 +78,27 @@ export const editProductStatus = async (id, status) => {
     return error.message;
   }
 };
+
+export const placeBid = async (payload) => {
+  try {
+    const response = await axiosService.post("/bids/new-bid", payload);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    throw new Error(error.message);
+  }
+};
+
+//get products
+
+export const getBids = async (filters) => {
+  try {
+    const response = await axiosService.post("/bids", {
+      product: filters.product,
+    });
+
+    return response.data;
+  } catch (error) {
+    return error.message;
+  }
+};

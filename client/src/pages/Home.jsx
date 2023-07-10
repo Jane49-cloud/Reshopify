@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -6,8 +6,11 @@ import { getProducts } from "../apicalls/products.actions";
 import { setLoader } from "../redux/LoaderSlice";
 import fallback from "../assets/fallback.png";
 import { useNavigate } from "react-router-dom";
+import Filters from "../components/filters";
 
 const Home = () => {
+  const [showFilters, setShowFilters] = useState(true);
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [products, setProducts] = React.useState([]);
@@ -34,18 +37,30 @@ const Home = () => {
   }, []);
 
   return (
-    <div>
-      <div className="grid grid-cols-5 mt-4 gap-5">
+    <div className="flex">
+      {showFilters && (
+        <Filters
+          setFilters={setFilters}
+          setShowFilters={setShowFilters}
+          filters={filters}
+          showFilters={setShowFilters}
+        />
+      )}
+      <div
+        className={`
+      grid gap-3 p-2 ${showFilters ? "grid-cols-3" : "grid-cols-4"}
+      `}
+      >
         {products.map((product) => {
           return (
             <div
               key={product._id}
-              className="max-w-sm bg-white rounded-lg shadow-lg overflow-hidden flex-col gap-2 cursor-pointer "
+              className="max-w-sm bg-white rounded-lg shadow-lg overflow-hidden flex-col gap-2 cursor-pointer border-secondary-800 border-2 border-opacity-60 "
               onClick={() => navigate(`/product/${product._id}`)}
             >
               <img
                 src={product.images.length === 0 ? fallback : product.images[0]}
-                className="h-40 w-full object-cover"
+                className="h-40 w-full object-cover p-5 rounded-md"
                 alt=""
               />
               <div className="p-4">

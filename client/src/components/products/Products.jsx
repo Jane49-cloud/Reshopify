@@ -9,8 +9,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { Table } from "antd";
 import { Delete, Edit } from "@mui/icons-material";
 import { deleteProduct } from "../../apicalls/products.actions";
+import Bids from "../Bids/Bids";
 
 const Products = () => {
+  const [showBids, setShowBids] = useState(false);
+  const [bids, setBids] = useState([]);
   const [Products, setProducts] = React.useState([]);
   const [selectedProduct, setSelectedProduct] = React.useState(null);
   const [showProductForm, setShowProductForm] = useState(false);
@@ -101,6 +104,15 @@ const Products = () => {
               className="text-primary-600 "
               onClick={() => DeleteProduct(record._id)}
             />
+            <span
+              className="underline"
+              onClick={() => {
+                setShowBids(true);
+                setSelectedProduct(record);
+              }}
+            >
+              Show bids
+            </span>
           </div>
         );
       },
@@ -135,6 +147,14 @@ const Products = () => {
           setShowProductForm={setShowProductForm}
           selectedProduct={selectedProduct}
           getData={getData}
+        />
+      )}
+
+      {showBids && (
+        <Bids
+          showBidsModal={showBids}
+          setShowBidsModal={setShowBids}
+          selectedProduct={selectedProduct}
         />
       )}
 

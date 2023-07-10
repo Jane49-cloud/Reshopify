@@ -9,7 +9,7 @@ const App = () => {
   const { loading } = useSelector((state) => state.loaders);
 
   return (
-    <div className="bg-gray-50 h-screen">
+    <div className=" ">
       {loading && <Loader />}
       <Router>
         <RoutePaths />

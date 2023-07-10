@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { getProduct } from "../apicalls/products.actions";
+import { getBids, getProduct } from "../apicalls/products.actions";
 import { setLoader } from "../redux/LoaderSlice";
 import fallback from "../assets/fallback.png";
 import { useNavigate, useParams } from "react-router-dom";
+import BidModal from "../components/Bids/BidModal";
 
 const ProductInfo = () => {
+  const [showNewBid, setShowNewBid] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState(0);
   const [product, setProduct] = useState(null);
   const navigate = useNavigate();
@@ -19,7 +21,8 @@ const ProductInfo = () => {
       dispatch(setLoader(true));
       const response = await getProduct(id);
       if (response.success) {
-        setProduct(response.data);
+        const bidsResponse = await getBids({ product: id });
+        setProduct({ ...response.data, bids: bidsResponse.data });
         console.log(response.data);
       }
       dispatch(setLoader(false));
@@ -99,8 +102,38 @@ const ProductInfo = () => {
               <span> {product?.seller.email}</span>
             </div>
           </div>
+          {/*  */}
+          <hr />
+          <div className="flex flex-col">
+            <div className="flex justify-between pr-2">
+              <p className="text-2xl font-semibold text-secondary-800 ">Bids</p>
+              <button
+                className="bg-primary-600 p-2 rounded text-white"
+                onClick={() => setShowNewBid(true)}
+              >
+                New Bid
+              </button>
+            </div>
+            <div className="grid grid-cols-2 gap-4 mt-2">
+              {/* <span>Name</span>
+              <span>
+                {product?.seller.firstName} {product?.seller.lastName}
+              </span>
+              <span>Contact</span>
+              <span> {product?.seller.email}</span> */}
+            </div>
+          </div>
+          {/*  */}
         </div>
       </div>
+      {showNewBid && (
+        <BidModal
+          setShowNewBid={setShowNewBid}
+          showNewBid={showNewBid}
+          product={product}
+          getData={getData}
+        />
+      )}
     </div>
   );
 };

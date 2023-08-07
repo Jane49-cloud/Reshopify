@@ -22,3 +22,8 @@
   background-color: hsl(0, 82%, 60%);
   color: #fff;
 }
+
+.sidebar {
+  height: 90vh;
+  position: sticky;
+}

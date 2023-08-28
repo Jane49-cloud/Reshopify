@@ -6,6 +6,7 @@ import userRouter from "./users/routes.js";
 import productRouter from "./products/routes.js";
 import ImageRouter from "./products/controller.js";
 import BidRoutes from "./Bids/routes.js";
+import NotificationRouter from "./notifications/routes.js";
 
 const app = express();
 dotenv.config();
@@ -18,6 +19,7 @@ app.use("/users", userRouter);
 app.use("/products", productRouter);
 app.use("/products", ImageRouter);
 app.use("/bids", BidRoutes);
+app.use("/notifications", NotificationRouter);
 
 const port = 8000;
 app.listen(port, () => console.log(`Server is running on port ${port}`));

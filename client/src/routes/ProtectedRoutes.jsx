@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { getUser } from "../apicalls/user.actions";
 import { setLoader } from "../redux/LoaderSlice";
 import { setUser } from "../redux/UserSlice";
+import Notification from "../components/Notification";
 import {
   IconButton,
   MenuItem,
@@ -16,11 +17,16 @@ import {
 import { NotificationsActive } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getAllNotifications } from "../apicalls/Notifications";
 
 const ProtectedRoutes = ({ children }) => {
+  const [notification = [], setNotifications] = React.useState([]);
+  const [showNotifications, setShowNotification] = React.useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { user } = useSelector((state) => state.users);
+
+  const reloadNotifications = () => {};
 
   const validateToken = async () => {
     try {
@@ -37,8 +43,28 @@ const ProtectedRoutes = ({ children }) => {
     }
   };
 
+  const getTheNotifications = async () => {
+    try {
+      dispatch(setLoader(true));
+      const response = await getAllNotifications();
+      if (response.success) {
+        dispatch(setLoader(false));
+        setNotifications(response.data);
+        console.log(notification);
+        console.log(notification.length);
+        console.log("hello world!");
+      } else {
+        throw new Error(response.error);
+      }
+    } catch (error) {
+      dispatch(setLoader(false));
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
     validateToken();
+    getTheNotifications();
   }, []);
 
   // useEffect(() => {
@@ -63,11 +89,37 @@ const ProtectedRoutes = ({ children }) => {
           </Typography>
           <div className="flex items-center">
             {/* User Profile */}
-            <div className="mr-3">
-              <IconButton style={{ color: "#991b1b", backgroundColor: "#eee" }}>
+            <div className="mr-3" style={{ position: "relative" }}>
+              <IconButton
+                style={{
+                  color: "#991b1b",
+                  backgroundColor: "#eee",
+                  cursor: "pointer",
+                }}
+                onClick={() => setShowNotification(true)}
+              >
                 <NotificationsActive />
               </IconButton>
+              <div
+                style={{
+                  position: "absolute",
+                  top: "-10px",
+                  right: "-10px",
+                  backgroundColor: "red",
+                  color: "white",
+                  borderRadius: "50%",
+                  width: "20px",
+                  height: "20px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  fontSize: "12px",
+                }}
+              >
+                {notification?.length}
+              </div>
             </div>
+
             <div className="flex items-center">
               <FormControl variant="standard" value={user.firstName}>
                 <Select
@@ -118,6 +170,12 @@ const ProtectedRoutes = ({ children }) => {
         <div className="flex justify-center mt-4">
           {/* <ToastContainer /> */}
         </div>
+        <Notification
+          showNotifications={showNotifications}
+          setShowNotification={setShowNotification}
+          notifications={notification}
+          reloadNotification={reloadNotifications}
+        />
       </div>
     )
   );

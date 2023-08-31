@@ -9,6 +9,7 @@ import { addProduct, editProduct } from "../../apicalls/products.actions";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Images from "./Images";
+import { addNotification } from "../../apicalls/Notifications";
 
 const ProductForm = ({
   showProductForm,
@@ -36,6 +37,14 @@ const ProductForm = ({
         toast.success(response.message);
         getData();
         setShowProductForm(false);
+
+        await addNotification({
+          title: "New Product",
+          message: `${user.firstName} has added a new product, Edit status`,
+          user: "649c7bb96d2771a121c34dcb",
+          read: false,
+          onclick: "/profile",
+        });
       } else {
         toast.error(error.message);
         dispatch(setLoader(false));

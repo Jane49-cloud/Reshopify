@@ -12,6 +12,7 @@ import {
   deleteProduct,
   editProductStatus,
 } from "../../apicalls/products.actions";
+import { addNotification } from "../../apicalls/Notifications";
 
 const Products = () => {
   const [Products, setProducts] = React.useState([]);
@@ -24,6 +25,14 @@ const Products = () => {
       if (response.success) {
         toast.success(response.message);
         getData();
+
+        await addNotification({
+          title: "Status update",
+          message: `Admin has ${status}ed  ${product.name}`,
+          user: seller._id,
+          read: false,
+          onclick: "/profile",
+        });
       } else {
         toast.error(response.message);
       }

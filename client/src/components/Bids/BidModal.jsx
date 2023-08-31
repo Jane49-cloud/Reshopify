@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { setLoader } from "../../redux/LoaderSlice";
 import { placeBid } from "../../apicalls/products.actions";
 import { toast, ToastContainer } from "react-toastify";
+import { addNotification } from "../../apicalls/Notifications";
 
 const BidModal = ({ showNewBid, setShowNewBid, product, getData }) => {
   const { user } = useSelector((state) => state.users);
@@ -26,6 +27,14 @@ const BidModal = ({ showNewBid, setShowNewBid, product, getData }) => {
         getData();
         setShowNewBid(false);
       }
+
+      await addNotification({
+        title: "New bid",
+        message: `${user.firstName} has places a new bid on ${product.name} for ksh ${values.bidAmount}`,
+        user: product.seller._id,
+        onclick: "/profile",
+        read: false,
+      });
     } catch (error) {
       toast.error(error.message);
       dispatch(setLoader(false));

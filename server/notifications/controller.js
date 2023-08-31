@@ -22,18 +22,22 @@ export const addNotification = async (req, res) => {
 
 export const getNotifications = async (req, res) => {
   try {
-    const notification = await Notifications.find({ user: req.body.id }).sort({
+    const notification = await Notification.find({
+      user: req.body.userId,
+    }).sort({
       createdAt: -1,
     });
     res.send({
       success: true,
       data: notification,
     });
+    console.log("this Api call was successful");
   } catch (error) {
     res.send({
       success: false,
       message: error.message,
     });
+    console.log("this Api call failed", error);
   }
 };
 
@@ -45,6 +49,29 @@ export const deleteNotification = async (req, res) => {
     message: "notification deleted...",
   });
   try {
+  } catch (error) {
+    res.send({
+      success: false,
+      message: error.message,
+    });
+  }
+};
+
+export const readAllNotifications = async (req, res) => {
+  try {
+    await Notification.updateMany(
+      {
+        user: req.body.userId,
+        read: false,
+      },
+      {
+        $set: { read: true },
+      }
+    );
+    res.send({
+      success: True,
+      message: "All notifications marked as read..",
+    });
   } catch (error) {
     res.send({
       success: false,

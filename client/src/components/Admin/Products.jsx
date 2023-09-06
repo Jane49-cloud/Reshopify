@@ -24,12 +24,12 @@ const Products = () => {
       const response = await editProductStatus(id, status);
       if (response.success) {
         toast.success(response.message);
-        getData();
 
+        getData();
         await addNotification({
           title: "Status update",
           message: `Admin has ${status}ed  ${product.name}`,
-          user: seller._id,
+          user: selectedProduct.seller,
           read: false,
           onclick: "/profile",
         });

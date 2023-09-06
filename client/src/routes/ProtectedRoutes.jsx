@@ -67,11 +67,12 @@ const ProtectedRoutes = ({ children }) => {
     getTheNotifications();
   }, []);
 
-  // useEffect(() => {
-  //   if (!user) {
-  //     navigate("/login");
-  //   }
-  // }, []);
+  useEffect(() => {
+    const userToken = localStorage.getItem("token");
+    if (userToken && !user) {
+      navigate("/");
+    }
+  }, [user]);
 
   return (
     user && (

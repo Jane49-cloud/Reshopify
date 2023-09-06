@@ -65,21 +65,31 @@ const Home = () => {
 
         <div
           className={`
-      grid gap-3 p-2 ${showFilters ? "grid-cols-3" : "grid-cols-4"}
+      grid gap-3 p-2 ${
+        showFilters
+          ? "grid-cols-3 responsive-example-2"
+          : "grid-cols-4 responsive-example"
+      }
       `}
         >
           {products.map((product) => {
             return (
               <div
                 key={product._id}
-                className="max-w-sm bg-white rounded-lg shadow-lg overflow-hidden flex-col gap-2 cursor-pointer border-secondary-800 border-2 border-opacity-60 "
+                className="max-w-sm bg-white rounded-lg overflow-hidden flex-col gap-2 cursor-pointer responsive-item"
+                style={{
+                  boxShadow:
+                    "0 4px 6px rgba(0, 0, 0, 0.2), 0 1px 4px rgba(0, 0, 0, 0.2)",
+                }}
                 onClick={() => navigate(`/product/${product._id}`)}
               >
                 <img
                   src={
-                    product.images.length === 0 ? fallback : product.images[0]
+                    product.images.length === 0
+                      ? fallback
+                      : product.images[0] || product.images[1]
                   }
-                  className="h-40 w-full object-cover p-5 rounded-md"
+                  className="h-52 w-full object-cover p-5 rounded-md"
                   alt=""
                 />
                 <div className="p-4">
@@ -88,12 +98,19 @@ const Home = () => {
                     {product.description}
                   </p>
                   <p className="text-gray-600">Ksh {product.price}</p>
-                  <button
-                    className="bg-secondary-800 text-white h-10 w-40 rounded-md hover:bg-secondary-700 mt-4"
-                    type="submit"
-                  >
-                    <strong>Bid</strong>
-                  </button>
+                  <div className="mt-4 relative">
+                    <button
+                      className="text-secondary-700 h-10 w-40 rounded-md"
+                      style={{ backgroundColor: "transparent", border: "none" }}
+                      type="submit"
+                    >
+                      <strong className="text-xl text-center">Add Bid</strong>
+                    </button>
+                    <div
+                      className="absolute inset-0 rounded-md"
+                      style={{ backgroundColor: "#000000", opacity: 0.1 }}
+                    ></div>
+                  </div>
                 </div>
               </div>
             );

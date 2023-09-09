@@ -3,10 +3,10 @@ import CloseIcon from "@mui/icons-material/Close";
 
 const Filters = ({ showFilters, setShowFilters, filters, setFilters }) => {
   const categories = [
-    {
-      name: "All",
-      value: "",
-    },
+    // {
+    //   name: "All",
+    //   value: "",
+    // },
     {
       name: "Electronics",
       value: "electronics",
@@ -24,10 +24,10 @@ const Filters = ({ showFilters, setShowFilters, filters, setFilters }) => {
   ];
 
   const ages = [
-    {
-      name: "All",
-      value: "",
-    },
+    // {
+    //   name: "All",
+    //   value: "",
+    // },
 
     {
       name: "0-2 years old",
@@ -57,7 +57,7 @@ const Filters = ({ showFilters, setShowFilters, filters, setFilters }) => {
         <CloseIcon onClick={() => setShowFilters(!showFilters)} />
       </div>
       <div className="flex flex-col gap-1 mt-5 p-2">
-        <h1>Categories</h1>
+        <h1 className="text-xl">Categories</h1>
         <div className="flex flex-col item-center gap-2">
           {categories.map((category) => {
             return (

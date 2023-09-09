@@ -31,7 +31,6 @@ export const getNotifications = async (req, res) => {
       success: true,
       data: notification,
     });
-    console.log("this Api call was successful");
   } catch (error) {
     res.send({
       success: false,
@@ -68,11 +67,13 @@ export const readAllNotifications = async (req, res) => {
         $set: { read: true },
       }
     );
+    console.log("this api request has been updated and successfully");
     res.send({
-      success: True,
+      success: true,
       message: "All notifications marked as read..",
     });
   } catch (error) {
+    console.log(error);
     res.send({
       success: false,
       message: error.message,

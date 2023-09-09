@@ -36,8 +36,9 @@ const Home = () => {
   };
 
   React.useEffect(() => {
+    console.log(filters);
     getData();
-  }, []);
+  }, [filters]);
 
   return (
     <div className="flex gap-5">
@@ -47,20 +48,28 @@ const Home = () => {
           setShowFilters={setShowFilters}
           filters={filters}
           showFilters={setShowFilters}
+          className="filters"
         />
       )}
 
       <div>
-        <div className="flex gap-5 item-center p-5">
+        <div className="flex gap-5 item-center p-5 ">
           <FilterListIcon
             onClick={() => setShowFilters(true)}
             className="text-xl"
           />
           <input
             type="text"
-            placeholder="search... "
-            className="w-full rounded border border-solid cursor-pointer p-2"
+            placeholder="search..."
+            className="w-full rounded border border-solid cursor-pointer p-2 focus:outline-none focus:border-gray-50"
           />
+
+          <button
+            type="submit"
+            className="p-2 text-center bg-gray-500 text-white rounded"
+          >
+            Search...
+          </button>
         </div>
 
         <div
@@ -116,6 +125,13 @@ const Home = () => {
             );
           })}
         </div>
+        {products.length === 0 && (
+          <div className="text-center text-gray-500 text-lg py-2 bg-gray-100 rounded p-4 m-5">
+            We apologize, but it seems there are no products available in this
+            category at the moment. Please explore our other categories or
+            refine your search to discover exciting products!
+          </div>
+        )}
       </div>
     </div>
   );

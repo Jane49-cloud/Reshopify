@@ -37,7 +37,7 @@
 }
 
 .responsive-example-2 {
-  max-width: 80vw;
+  max-width: 85vw;
   margin: 20px auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -87,5 +87,19 @@
   100% {
     inset: 0;
     transform: rotate(90deg);
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .filters {
+    position: absolute;
+    top: 4rem;
+    background-color: #f03355;
+  }
+  .responsive-example {
+    padding: 0 2rem;
+  }
+  .responsive-example-2 {
+    width: 100vw;
   }
 }

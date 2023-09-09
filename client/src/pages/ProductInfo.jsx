@@ -80,6 +80,8 @@ const ProductInfo = () => {
               <span>ksh {product?.price}</span>
               <span>Category</span>
               <span> {product?.category}</span>
+              <span>Age</span>
+              <span>{product?.age} year(s)</span>
               <span>Warranty Available</span>
               <span> {product?.warrantAvailable ? "Yes" : "No"}</span>
               <span>Box Available</span>

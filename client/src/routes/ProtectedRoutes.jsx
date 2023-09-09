@@ -17,7 +17,10 @@ import {
 import { NotificationsActive } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getAllNotifications } from "../apicalls/Notifications";
+import {
+  getAllNotifications,
+  readAllNotifications,
+} from "../apicalls/Notifications";
 
 const ProtectedRoutes = ({ children }) => {
   const [notification = [], setNotifications] = React.useState([]);
@@ -62,6 +65,23 @@ const ProtectedRoutes = ({ children }) => {
     }
   };
 
+  const readNotifications = async () => {
+    try {
+      dispatch(setLoader(true));
+      const response = await readAllNotifications();
+      dispatch(setLoader(false));
+      if (response.success) {
+        console.log("Successfully");
+        getTheNotifications();
+      } else {
+        throw new Error(response.message);
+      }
+    } catch (error) {
+      dispatch(setLoader(false));
+      toast.error(error.message);
+    }
+  };
+
   useEffect(() => {
     validateToken();
     getTheNotifications();
@@ -73,6 +93,10 @@ const ProtectedRoutes = ({ children }) => {
       navigate("/");
     }
   }, [user]);
+
+  const unreadNotificationsCount = notification.filter(
+    (notif) => !notif.read
+  ).length;
 
   return (
     user && (
@@ -97,7 +121,10 @@ const ProtectedRoutes = ({ children }) => {
                   backgroundColor: "#eee",
                   cursor: "pointer",
                 }}
-                onClick={() => setShowNotification(true)}
+                onClick={() => {
+                  readNotifications();
+                  setShowNotification(true);
+                }}
               >
                 <NotificationsActive />
               </IconButton>
@@ -117,7 +144,7 @@ const ProtectedRoutes = ({ children }) => {
                   fontSize: "12px",
                 }}
               >
-                {notification?.length}
+                {unreadNotificationsCount > 0 ? unreadNotificationsCount : "0"}
               </div>
             </div>
 

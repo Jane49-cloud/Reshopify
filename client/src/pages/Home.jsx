@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -11,6 +11,16 @@ import FilterListIcon from "@mui/icons-material/FilterList";
 
 const Home = () => {
   const [showFilters, setShowFilters] = useState(true);
+  const [searchTerm, setSearchTerm] = useState("");
+  const searchValue = useRef("");
+  const searchProduct = () => {
+    setSearchTerm(searchValue.current.value);
+    console.log(searchTerm);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+  };
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,7 +34,8 @@ const Home = () => {
   const getData = async () => {
     try {
       dispatch(setLoader(true));
-      const response = await getProducts(filters);
+      const response = await getProducts({ ...filters, searchTerm });
+      console.log(response);
       if (response.success) {
         setProducts(response.products);
       }
@@ -36,9 +47,8 @@ const Home = () => {
   };
 
   React.useEffect(() => {
-    console.log(filters);
     getData();
-  }, [filters]);
+  }, [filters, searchTerm]);
 
   return (
     <div className="flex gap-5">
@@ -53,24 +63,28 @@ const Home = () => {
       )}
 
       <div>
-        <div className="flex gap-5 item-center p-5 ">
-          <FilterListIcon
-            onClick={() => setShowFilters(true)}
-            className="text-xl"
-          />
-          <input
-            type="text"
-            placeholder="search..."
-            className="w-full rounded border border-solid cursor-pointer p-2 focus:outline-none focus:border-gray-50"
-          />
+        <form onSubmit={handleSubmit}>
+          <div className="flex gap-5 item-center p-5 ">
+            <FilterListIcon
+              onClick={() => setShowFilters(true)}
+              className="text-xl"
+            />
+            <input
+              type="text"
+              placeholder="search..."
+              ref={searchValue}
+              onChange={searchProduct}
+              className="w-full rounded border border-solid cursor-pointer p-2 focus:outline-none focus:border-gray-50"
+            />
 
-          <button
-            type="submit"
-            className="p-2 text-center bg-gray-500 text-white rounded"
-          >
-            Search...
-          </button>
-        </div>
+            <button
+              type="submit"
+              className="p-2 text-center bg-gray-500 text-white rounded"
+            >
+              Search...
+            </button>
+          </div>
+        </form>
 
         <div
           className={`

@@ -30,7 +30,7 @@ const BidModal = ({ showNewBid, setShowNewBid, product, getData }) => {
 
       await addNotification({
         title: "New bid",
-        message: `${user.firstName} has places a new bid on ${product.name} for ksh ${values.bidAmount}`,
+        message: `${user.firstName} has placed a new bid on ${product.name} for ksh ${values.bidAmount}`,
         user: product.seller._id,
         onclick: "/profile",
         read: false,

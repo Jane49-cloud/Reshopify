@@ -43,7 +43,7 @@ const ProductForm = ({
           message: `${user.firstName} has added a new product, Edit status`,
           user: "649c7bb96d2771a121c34dcb",
           read: false,
-          onclick: "/profile",
+          onclick: "/admin",
         });
       } else {
         toast.error(error.message);
